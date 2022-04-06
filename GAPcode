@@ -1,0 +1,47 @@
+n:=;
+m:=;
+u:=;
+L:=[];
+
+minmonotriangles:=100;
+mincoloring:=[];
+
+for c in IteratorOfCombinations([1..m]) do
+	l:=StructuralCopy(L);
+	for i in [1..m] do
+		if IsSubset(c,[i]) then
+			Add(l[i],-1);
+		else
+			Add(l[i],0);
+		fi;
+	od;
+
+	bluetriangles:=0;
+	redtriangles:=0;
+	for t in Combinations(l,3) do
+		bre:=1;
+		colorsum:=0;
+
+		T:=StructuralCopy(t);
+		for i in [1..3] do
+			Remove(T[i]);
+		od;
+		if Length(Union(Intersection(T[1],T[2]),Intersection(T[1],T[3]),Intersection(T[2],T[3])))=3 then
+			for  i in [1..3] do
+				colorsum:=colorsum+t[i][u+1];
+			od;
+			if colorsum=0 then
+				bluetriangles:=bluetriangles+1;
+			elif colorsum=-3 then
+				redtriangles:=redtriangles+1;
+			fi;
+		fi; 
+	od;
+	if redtriangles+bluetriangles<minmonotriangles then
+			minmonotriangles:=redtriangles+bluetriangles;
+			mincoloring:=l;
+			
+	fi;
+od;
+minmonotriangles;
+mincoloring;
